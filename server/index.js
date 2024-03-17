@@ -25,6 +25,10 @@ const io = new Server(server, {
 	},
 });
 
+io.on('connection', (socket) => {
+	console.log(socket.id);
+});
+
 // home route
 app.get('/', (req, res) => {
 	res.send('API running');
