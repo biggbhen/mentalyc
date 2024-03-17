@@ -1,13 +1,13 @@
 {
 	"name": "server",
 	"version": "1.0.0",
-	"description": "",
+	"description": "mentalyc backend for storing audio files",
 	"main": "index.js",
 	"scripts": {
 		"start": "node server.js",
 		"server": "nodemon server.js"
 	},
-	"author": "",
+	"author": "Benjamin",
 	"license": "ISC",
 	"dependencies": {
 		"cors": "^2.8.5",
