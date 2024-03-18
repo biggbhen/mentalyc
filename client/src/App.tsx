@@ -1,4 +1,5 @@
 import React from 'react';
+import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import Home from './pages/Home';
@@ -9,6 +10,8 @@ function App() {
 
 	// requesting access to the user's media devices on app mount
 	React.useEffect(() => {
+		socket.emit('send_message', { message: 'socket is sooo connected' });
+
 		navigator.mediaDevices
 			.getUserMedia({ video: false, audio: true })
 			.then((media) => {
@@ -17,6 +20,8 @@ function App() {
 			.catch((err) => {
 				console.log(`error message: ${err}`);
 			});
+
+		// eslint-disable-next-line
 	}, []);
 
 	return (

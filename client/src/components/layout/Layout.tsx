@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Outlet } from 'react-router-dom';
 import Header from './Header';
+import Sidebar from './Sidebar';
 
 type Props = {};
 
@@ -9,7 +10,10 @@ const Layout = (props: Props) => {
 	return (
 		<div>
 			<Header />
-			<Outlet />
+			<Sidebar />
+			<div className='pl-[250px] mt-[80px]'>
+				<Outlet />
+			</div>
 		</div>
 	);
 };
