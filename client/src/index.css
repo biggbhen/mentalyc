@@ -828,6 +828,10 @@ video {
   --tw-shadow: var(--tw-shadow-colored);
 }
 
+.filter {
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
 .hover\:bg-\[\#FFF0F7\]:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(255 240 247 / var(--tw-bg-opacity));

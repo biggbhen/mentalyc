@@ -12,14 +12,14 @@ function App() {
 	React.useEffect(() => {
 		socket.emit('send_message', { message: 'socket is sooo connected' });
 
-		navigator.mediaDevices
-			.getUserMedia({ video: false, audio: true })
-			.then((media) => {
-				console.log('audio device allowed');
-			})
-			.catch((err) => {
-				console.log(`error message: ${err}`);
-			});
+		// navigator.mediaDevices
+		// 	.getUserMedia({ audio: true })
+		// 	.then((media) => {
+		// 		console.log('audio device allowed');
+		// 	})
+		// 	.catch((err) => {
+		// 		console.log(`error message: ${err}`);
+		// 	});
 
 		// eslint-disable-next-line
 	}, []);
