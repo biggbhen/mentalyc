@@ -10,8 +10,18 @@ const app = express();
 // Connect Database
 connectDB();
 
+const corsOptions = {
+	origin: '*',
+	optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+	methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+};
+
+// initiating middlewares
 // Enable Cross-Origin Resource Sharing
-app.use(cors());
+app.use(cors(corsOptions));
+
+// express formData()
+app.use(formData.parse());
 
 // parse incoming request bodies in JSON format
 app.use(express.json({ extended: false }));
@@ -25,15 +35,19 @@ const io = new Server(server, {
 	},
 });
 
+// checking websocket connection between client and server
 io.on('connection', (socket) => {
 	console.log(socket.id);
 	socket.on('send_message', (message) => console.log(message));
 });
 
-// home route
+// basic home route
 app.get('/', (req, res) => {
-	res.send('API running');
+	res.send('Welcome to Mentalyc...');
 });
+
+// Routes
+app.use('/api/recording', require('./routes/recording'));
 
 const PORT = process.env.PORT || 5000;
 

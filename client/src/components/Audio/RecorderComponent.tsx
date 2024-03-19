@@ -10,8 +10,13 @@ const AudioRecorder: React.FC<Props> = () => {
 	const [stream, setStream] = useState<MediaStream | null>(null);
 	const [recordingStatus, setRecordingStatus] = useState<string>('inactive');
 	const [audio, setAudio] = useState<string>('');
+	const [audioFile, setAudioFile] = useState<Blob | null>(null);
 	const [audioChunks, setAudioChunks] = useState<any>([]);
-	const [audioDuration, setAudioDuration] = useState<number | undefined>(0);
+	const [startTime, setStartTime] = useState<number | null>(null);
+	const [duration, setDuration] = useState<string | null>(null);
+
+	// form state
+	const [formData, setFormData] = useState<any>({});
 
 	// Get Microphone Permissions
 	const getMicrophonePermission = async () => {
@@ -34,6 +39,7 @@ const AudioRecorder: React.FC<Props> = () => {
 	// start audio recording
 	const startRecording = async () => {
 		setRecordingStatus('recording');
+		setStartTime(Date.now());
 
 		// Check if stream is not null before proceeding
 		if (stream) {
@@ -54,6 +60,7 @@ const AudioRecorder: React.FC<Props> = () => {
 					const audioBlob = new Blob(localAudioChunks, {
 						type: 'audio/ogg; codec=opus',
 					});
+					setAudioFile(audioBlob);
 					const audioUrl = URL.createObjectURL(audioBlob);
 					setAudio(audioUrl);
 					stream.getTracks().forEach(function (track) {
@@ -76,7 +83,16 @@ const AudioRecorder: React.FC<Props> = () => {
 
 	// end audio recording
 	const stopRecording = async () => {
-		setRecordingStatus('inactive');
+		if (startTime) {
+			const endTime = Date.now();
+			const recordingDuration = endTime - startTime;
+
+			const minutes = Math.floor(recordingDuration / (1000 * 60));
+			const seconds = Math.floor((recordingDuration % (1000 * 60)) / 1000);
+
+			setDuration(`${minutes}m ${seconds}s`);
+			setRecordingStatus('inactive');
+		}
 		// Check if recorder is not null before proceeding
 		if (recorder) {
 			//stops the recording instance
@@ -86,7 +102,23 @@ const AudioRecorder: React.FC<Props> = () => {
 		}
 	};
 
-	console.log(audioRef?.current?.duration);
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setFormData({
+			...formData,
+			[e.target.name]: e.target.value,
+		});
+	};
+
+	const handleSubmit = () => {
+		if (audioRef.current) {
+			console.log({
+				...formData,
+				duration,
+				audioFile,
+			});
+		}
+	};
+	console.log(formData);
 	return (
 		<div>
 			<Button variant='contained' onClick={getMicrophonePermission}>
@@ -105,6 +137,47 @@ const AudioRecorder: React.FC<Props> = () => {
 					Download Recording
 				</a>
 			</div>
+
+			{/* form */}
+			<form className='mt-[2rem]'>
+				<div className='mb-[1rem]'>
+					<label htmlFor='name' className='text-sm'>
+						Client Name
+					</label>
+					<input
+						type='text'
+						id='name'
+						name='name'
+						className='border border-[red]'
+						onChange={handleChange}
+						value={formData.name}
+					/>
+				</div>
+				<div>
+					<label htmlFor='title' className='text-sm'>
+						Session Title
+					</label>
+					<input
+						type='text'
+						id='title'
+						name='title'
+						className='border border-[red]'
+						onChange={handleChange}
+						value={formData.title}
+					/>
+				</div>
+
+				<div>
+					<Button
+						onClick={handleSubmit}
+						variant='outlined'
+						sx={{
+							marginTop: '1rem',
+						}}>
+						upload
+					</Button>
+				</div>
+			</form>
 		</div>
 	);
 };
