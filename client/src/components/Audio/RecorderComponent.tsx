@@ -4,12 +4,14 @@ import React, { useState, useRef } from 'react';
 type Props = {};
 
 const AudioRecorder: React.FC<Props> = () => {
-	const audioRecorder = useRef<HTMLAudioElement>(null);
+	const audioRef = useRef<HTMLAudioElement>(null);
 	const [permission, setPermission] = useState<boolean>(false);
 	const [recorder, setRecorder] = useState<MediaRecorder | null>(null);
 	const [stream, setStream] = useState<MediaStream | null>(null);
 	const [recordingStatus, setRecordingStatus] = useState<string>('inactive');
 	const [audio, setAudio] = useState<string>('');
+	const [audioChunks, setAudioChunks] = useState<any>([]);
+	const [audioDuration, setAudioDuration] = useState<number | undefined>(0);
 
 	// Get Microphone Permissions
 	const getMicrophonePermission = async () => {
@@ -62,6 +64,7 @@ const AudioRecorder: React.FC<Props> = () => {
 				// Invokes the start method to start the recording process
 				mediaRecorderInstance.start();
 				setRecorder(mediaRecorderInstance);
+				setAudioChunks(localAudioChunks);
 			} catch (error) {
 				console.error('Error starting recording:', error);
 			}
@@ -83,6 +86,7 @@ const AudioRecorder: React.FC<Props> = () => {
 		}
 	};
 
+	console.log(audioRef?.current?.duration);
 	return (
 		<div>
 			<Button variant='contained' onClick={getMicrophonePermission}>
@@ -94,10 +98,9 @@ const AudioRecorder: React.FC<Props> = () => {
 			<Button variant='contained' onClick={stopRecording}>
 				stop Record
 			</Button>
-			{/* <p>{micPermission === 'granted' ? 'heyyyyy' : 'oh no'}</p> */}
 
 			<div className='audio-container'>
-				<audio src={audio} controls ref={audioRecorder}></audio>
+				<audio src={audio} controls ref={audioRef}></audio>
 				<a download href={audio}>
 					Download Recording
 				</a>
