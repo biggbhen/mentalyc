@@ -1,9 +1,13 @@
 import { Button } from '@mui/material';
 import React, { useState, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { recordSelector } from '../../app/feature/selector';
 
 type Props = {};
 
 const AudioRecorder: React.FC<Props> = () => {
+	const selector = useSelector(recordSelector);
+
 	const audioRef = useRef<HTMLAudioElement>(null);
 	const [permission, setPermission] = useState<boolean>(false);
 	const [recorder, setRecorder] = useState<MediaRecorder | null>(null);
