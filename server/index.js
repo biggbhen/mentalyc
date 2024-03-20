@@ -4,6 +4,7 @@ const http = require('http');
 const cors = require('cors');
 const connectDB = require('./config/db');
 const { Server } = require('socket.io');
+const formData = require('express-form-data');
 
 const app = express();
 

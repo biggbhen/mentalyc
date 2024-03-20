@@ -13,10 +13,6 @@ const SessionSchema = mongoose.Schema({
 		type: String,
 		default: 'pending',
 	},
-	uploadStatus: {
-		type: Number,
-		default: 0,
-	},
 	recordName: {
 		type: String,
 		required: true,
@@ -29,11 +25,10 @@ const SessionSchema = mongoose.Schema({
 	recordDuration: {
 		type: String,
 	},
-	recordUrl: {
-		type: String,
-	},
 	date: {
 		type: Date,
 		default: Date.now,
 	},
 });
+
+module.exports = mongoose.model('session', SessionSchema);
