@@ -1,12 +1,19 @@
-import { Button } from '@mui/material';
+import { Button, IconButton, Tooltip } from '@mui/material';
 import React, { useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { recordSelector } from '../../app/feature/selector';
+import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
+import MicIcon from '@mui/icons-material/Mic';
+import MicOffIcon from '@mui/icons-material/MicOff';
+import { getAllRecords } from '../../app/feature/feature';
+import { AppDispatch } from '../../app/store/store';
+import StopCircleIcon from '@mui/icons-material/StopCircle';
 
 type Props = {};
 
 const AudioRecorder: React.FC<Props> = () => {
 	const selector = useSelector(recordSelector);
+	const dispatch = useDispatch<AppDispatch>();
 
 	const audioRef = useRef<HTMLAudioElement>(null);
 	const [permission, setPermission] = useState<boolean>(false);
@@ -18,6 +25,11 @@ const AudioRecorder: React.FC<Props> = () => {
 	const [audioChunks, setAudioChunks] = useState<any>([]);
 	const [startTime, setStartTime] = useState<number | null>(null);
 	const [duration, setDuration] = useState<string | null>(null);
+
+	// React.useEffect(() => {
+	// 	dispatch(getAllRecords());
+	// 	// eslint-disable-next-line
+	// }, []);
 
 	// form state
 	const [formData, setFormData] = useState<any>({});
@@ -42,6 +54,7 @@ const AudioRecorder: React.FC<Props> = () => {
 
 	// start audio recording
 	const startRecording = async () => {
+		getMicrophonePermission();
 		setRecordingStatus('recording');
 		setStartTime(Date.now());
 
@@ -95,7 +108,7 @@ const AudioRecorder: React.FC<Props> = () => {
 			const seconds = Math.floor((recordingDuration % (1000 * 60)) / 1000);
 
 			setDuration(`${minutes}m ${seconds}s`);
-			setRecordingStatus('inactive');
+			setRecordingStatus('stopped');
 		}
 		// Check if recorder is not null before proceeding
 		if (recorder) {
@@ -122,66 +135,95 @@ const AudioRecorder: React.FC<Props> = () => {
 			});
 		}
 	};
-	console.log(formData);
+
+	React.useEffect(() => {
+		getMicrophonePermission();
+	}, []);
+
 	return (
-		<div>
-			<Button variant='contained' onClick={getMicrophonePermission}>
-				Handle Permission
-			</Button>
-			<Button variant='contained' onClick={startRecording}>
-				Handle Record
-			</Button>
-			<Button variant='contained' onClick={stopRecording}>
-				stop Record
-			</Button>
-
-			<div className='audio-container'>
-				<audio src={audio} controls ref={audioRef}></audio>
-				<a download href={audio}>
-					Download Recording
-				</a>
-			</div>
-
+		<div className='p-[20px] w-[500px]'>
+			<h2 className='mb-8 font-semibold'>Record a new session</h2>
 			{/* form */}
-			<form className='mt-[2rem]'>
+			<form className=''>
 				<div className='mb-[1rem]'>
-					<label htmlFor='name' className='text-sm'>
+					<label htmlFor='name' className='text-sm block mb-[5px]'>
 						Client Name
 					</label>
 					<input
 						type='text'
 						id='name'
 						name='name'
-						className='border border-[red]'
+						className='border border-[#E6E7EB] w-full p-2 rounded-[6px]'
 						onChange={handleChange}
 						value={formData.name}
 					/>
 				</div>
 				<div>
-					<label htmlFor='title' className='text-sm'>
+					<label htmlFor='title' className='text-sm block'>
 						Session Title
 					</label>
 					<input
 						type='text'
 						id='title'
 						name='title'
-						className='border border-[red]'
+						className='border border-[#E6E7EB] w-full p-2 rounded-[6px]'
 						onChange={handleChange}
 						value={formData.title}
 					/>
 				</div>
-
-				<div>
-					<Button
-						onClick={handleSubmit}
-						variant='outlined'
-						sx={{
-							marginTop: '1rem',
-						}}>
-						upload
-					</Button>
-				</div>
 			</form>
+
+			<div className='flex justify-between mt-8'>
+				<div className=''>
+					{recordingStatus === 'recording' ? (
+						<Tooltip title='play'>
+							<IconButton sx={{ cursor: 'pointer' }} onClick={stopRecording}>
+								<StopCircleIcon sx={{ fontSize: '3rem', color: '#731054' }} />
+							</IconButton>
+						</Tooltip>
+					) : (
+						<Tooltip title='play'>
+							<IconButton sx={{ cursor: 'pointer' }} onClick={startRecording}>
+								<RadioButtonCheckedIcon
+									sx={{ fontSize: '3rem', color: '#731054' }}
+								/>
+							</IconButton>
+						</Tooltip>
+					)}
+				</div>
+
+				<div className='flex items-center gap-x-[10px]'>
+					{recordingStatus === 'stopped' ? (
+						<div className='audio-container'>
+							<audio src={audio} controls ref={audioRef}></audio>
+						</div>
+					) : recordingStatus === 'recording' ? (
+						<p className='text-sm'>recording...</p>
+					) : (
+						<p className='text-sm'>
+							Click on the record button to start recording
+						</p>
+					)}
+					<div className='rounded-full bg-[#731054] flex justify-center items-center w-[50px] h-[50px]'>
+						{recordingStatus === 'recording' ? (
+							<MicIcon sx={{ fontSize: '1.2rem', color: 'white' }} />
+						) : (
+							<MicOffIcon sx={{ fontSize: '1.2rem', color: 'white' }} />
+						)}
+					</div>
+				</div>
+			</div>
+
+			<div>
+				<Button
+					onClick={handleSubmit}
+					variant='outlined'
+					sx={{
+						marginTop: '1rem',
+					}}>
+					upload
+				</Button>
+			</div>
 		</div>
 	);
 };

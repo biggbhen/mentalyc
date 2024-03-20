@@ -1,29 +1,34 @@
 import React from 'react';
-import RoundLogo from '../../assets/Mentalyc-Logo-round.png';
-import { MdDashboard } from 'react-icons/md';
-import { MdFolderCopy } from 'react-icons/md';
-import handIcon from '../../assets/waving-hand.png';
+import RoundLogo from '../../assets/Mentalyc _logo.svg';
+import recordIcon from '../../assets/voice.svg';
+import recordListIcon from '../../assets/menu-square.svg';
+import settingsIcon from '../../assets/setting-02.svg';
+import helpIcon from '../../assets/help-circle.svg';
 
 type Props = {};
 
 const Sidebar = (props: Props) => {
 	return (
-		<div className='fixed top-0 bottom-0 w-[200px] shadow-md z-40 bg-white py-[20px]'>
-			<figure className='flex justify-center'>
+		<div className='fixed top-0 bottom-0 w-[200px] shadow-md z-40 bg-[#FAFAFA] pt-[50px] pb-[20px] flex items-center flex-col'>
+			<figure className=''>
 				<img src={RoundLogo} alt='icon' className='rounded-full w-[70px]' />
 			</figure>
-			<h2 className='mt-[0.5rem] text-[#DF0B6F] flex items-center justify-center gap-[10px]'>
-				Hi John
-				<img src={handIcon} alt='icon' className='w-[25px]' />
-			</h2>
-			<ul className='mt-[2.5rem] min-h-[50px] py-[30px]'>
-				<li className='flex gap-x-[1rem] items-center justify-center border-r-[2px] border-r-[red] text-sm mb-[1rem] py-[10px] hover:bg-[#FFF0F7] cursor-pointer'>
-					<MdDashboard size={20} />
-					Dashboard
+			<ul className='mt-[2.5rem] py-[30px] w-max flex flex-col gap-y-[1rem]'>
+				<li className='flex gap-x-[10px] items-center text-sm py-[10px] hover:bg-[#FFF0F7] cursor-pointer'>
+					<img src={recordIcon} alt='icon' />
+					Record
 				</li>
-				<li className='flex gap-x-[1rem] items-center justify-center text-sm py-[10px] hover:bg-[#FFF0F7] cursor-pointer'>
-					<MdFolderCopy size={20} />
-					Recordings
+				<li className='flex gap-x-[10px] items-center text-sm py-[10px] hover:bg-[#FFF0F7] cursor-pointer'>
+					<img src={recordListIcon} alt='icon' />
+					Recordings List
+				</li>
+				<li className='flex gap-x-[10px] items-center text-sm py-[10px] hover:bg-[#FFF0F7] cursor-pointer'>
+					<img src={settingsIcon} alt='icon' />
+					Settings
+				</li>
+				<li className='flex gap-x-[10px] items-center text-sm py-[10px] hover:bg-[#FFF0F7] cursor-pointer'>
+					<img src={helpIcon} alt='icon' />
+					Help
 				</li>
 			</ul>
 		</div>

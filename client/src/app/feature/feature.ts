@@ -17,7 +17,7 @@ export const getAllRecords = createAsyncThunk(
 	'get/records',
 	async (payload, { rejectWithValue }) => {
 		try {
-			const response = await axios.get(`localhost:5000/api/recording`);
+			const response = await axios.get(`http://localhost:5000/api/recording`);
 
 			if (response.status && response.status === 200) {
 				return response.data;
@@ -40,7 +40,7 @@ const recordSlice = createSlice({
 				state.loading = true;
 			})
 			.addCase(getAllRecords.fulfilled, (state, action: PayloadAction<any>) => {
-				state.recordings = action.payload;
+				// state.recordings = action.payload;
 				state.loading = false;
 			})
 			.addCase(getAllRecords.rejected, (state, action: PayloadAction<any>) => {
