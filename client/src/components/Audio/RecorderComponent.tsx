@@ -102,7 +102,7 @@ const AudioRecorder: React.FC<Props> = ({ handleModalClose }) => {
 		}
 	};
 
-	// end audio recording
+	// stop audio recording
 	const stopRecording = async () => {
 		if (startTime) {
 			const endTime = Date.now();

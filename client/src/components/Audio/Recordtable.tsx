@@ -7,6 +7,11 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { useDispatch, useSelector } from 'react-redux';
+import { recordSelector } from '../../app/feature/selector';
+import { AppDispatch } from '../../app/store/store';
+import { getAllRecords } from '../../app/feature/feature';
+import { Skeleton } from '@mui/material';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
 	[`&.${tableCellClasses.head}`]: {
@@ -29,32 +34,43 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 	},
 }));
 
-function createData(
-	name: string,
-	calories: number,
-	fat: number,
-	carbs: number,
-	protein: number
-) {
-	return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-	createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-	createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-	createData('Eclair', 262, 16.0, 24, 6.0),
-	createData('Cupcake', 305, 3.7, 67, 4.3),
-	createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
 export default function RecordTable() {
+	const selector = useSelector(recordSelector);
+	const dispatch = useDispatch<AppDispatch>();
+
+	React.useEffect(() => {
+		dispatch(getAllRecords());
+	}, [dispatch]); // Dispatch action when component mounts
+
+	// Memoize data state using useMemo
+	const data = React.useMemo(() => {
+		// Return recordings data only if it's available and not empty
+		if (selector.recordings.length > 0) {
+			return selector.recordings;
+		}
+		// Return an empty array if recordings data is not available
+		return [];
+	}, [selector.recordings]); // Recompute data state when selector.recordings changes
+
+	// date converter
+
+	const sessionDate = (dateString: string) => {
+		const dateObject = new Date(dateString);
+
+		const day = dateObject.getUTCDate();
+		const month = dateObject.getUTCMonth() + 1; // Months are zero-indexed, so we add 1
+		const year = dateObject.getUTCFullYear();
+
+		return `${day}/${month}/${year}`;
+	};
+
 	return (
 		<TableContainer component={Paper}>
 			<Table sx={{ minWidth: 700 }} aria-label='customized table'>
 				<TableHead>
 					<TableRow>
-						<StyledTableCell sx={{ width: '200Px' }}>Name</StyledTableCell>
-						<StyledTableCell sx={{ width: '200Px' }}>Title</StyledTableCell>
+						<StyledTableCell>Name</StyledTableCell>
+						<StyledTableCell align='center'>Title</StyledTableCell>
 						<StyledTableCell align='center'>Duration</StyledTableCell>
 						<StyledTableCell align='center'>File</StyledTableCell>
 						<StyledTableCell align='center'>Date</StyledTableCell>
@@ -62,20 +78,57 @@ export default function RecordTable() {
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{rows.map((row) => (
-						<StyledTableRow key={row.name}>
-							<StyledTableCell component='th' scope='row'>
-								{row.name}
+					{data.length > 0 ? (
+						data.map((item: any) => (
+							<StyledTableRow key={item._id}>
+								<StyledTableCell
+									component='th'
+									scope='row'
+									sx={{ whiteSpace: 'noWrap' }}>
+									{item.name}
+								</StyledTableCell>
+								<StyledTableCell sx={{ whiteSpace: 'noWrap' }} align='center'>
+									{item.title}
+								</StyledTableCell>
+								<StyledTableCell align='center'>
+									{item.recordDuration}
+								</StyledTableCell>
+								<StyledTableCell align='center'>
+									<div className='audio-container'>
+										<audio src={item.recordUrl} controls></audio>
+									</div>
+								</StyledTableCell>
+								<StyledTableCell align='center'>
+									{sessionDate(item.date)}
+								</StyledTableCell>
+								<StyledTableCell align='center'>{item.status}</StyledTableCell>
+							</StyledTableRow>
+						))
+					) : (
+						<StyledTableRow>
+							<StyledTableCell
+								component='th'
+								scope='row'
+								sx={{ whiteSpace: 'noWrap' }}>
+								<Skeleton variant='rectangular' width={150} height={40} />
 							</StyledTableCell>
-							<StyledTableCell sx={{ width: '200Px' }}>
-								{row.calories}
+							<StyledTableCell sx={{ whiteSpace: 'noWrap' }} align='center'>
+								<Skeleton variant='rectangular' width={150} height={40} />
 							</StyledTableCell>
-							<StyledTableCell align='center'>{row.fat}</StyledTableCell>
-							<StyledTableCell align='center'>{row.carbs}</StyledTableCell>
-							<StyledTableCell align='center'>{row.protein}</StyledTableCell>
-							<StyledTableCell align='center'>{row.protein}</StyledTableCell>
+							<StyledTableCell align='center'>
+								<Skeleton variant='rectangular' width={150} height={40} />
+							</StyledTableCell>
+							<StyledTableCell align='center'>
+								<Skeleton variant='rectangular' width={150} height={40} />
+							</StyledTableCell>
+							<StyledTableCell align='center'>
+								<Skeleton variant='rectangular' width={150} height={40} />
+							</StyledTableCell>
+							<StyledTableCell align='center'>
+								<Skeleton variant='rectangular' width={150} height={40} />
+							</StyledTableCell>
 						</StyledTableRow>
-					))}
+					)}
 				</TableBody>
 			</Table>
 		</TableContainer>

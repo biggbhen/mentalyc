@@ -3,7 +3,6 @@ const express = require('express');
 const http = require('http');
 const cors = require('cors');
 const connectDB = require('./config/db');
-const { Server } = require('socket.io');
 const formData = require('express-form-data');
 
 const app = express();
@@ -28,20 +27,6 @@ app.use(formData.parse());
 app.use(express.json({ extended: false }));
 
 const server = http.createServer(app);
-
-// Create a Socket.IO server with the HTTP server
-const io = new Server(server, {
-	cors: {
-		origin: '*',
-		methods: ['GET', 'POST'],
-	},
-});
-
-// checking websocket connection between client and server
-io.on('connection', (socket) => {
-	console.log(socket.id);
-	socket.on('send_message', (message) => console.log(message));
-});
 
 app.get('/', (req, res) => {
 	res.send('Welcome to Mentalyc...');

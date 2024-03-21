@@ -25,7 +25,7 @@ const Home: React.FC<Props> = () => {
 	const handleModalClose = () => setOpen(false);
 
 	return (
-		<div>
+		<div className='my-8'>
 			<div className='min-h-[150px] max-w-[100%] w-[1100px] mx-auto'>
 				<div>
 					<h1 className='flex items-center gap-x-[10px] text-[1.5rem]'>

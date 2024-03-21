@@ -1,16 +1,19 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 interface RootState {
 	loading: boolean;
 	error: any;
 	recordings: any;
+	recording: any;
 }
 
 const initialState: RootState = {
 	loading: true,
 	error: null,
 	recordings: [],
+	recording: [],
 };
 
 export const getAllRecords = createAsyncThunk(
@@ -44,7 +47,10 @@ export const CreateNewRecord = createAsyncThunk(
 				}
 			);
 
-			if (response.status && response.status === 200) {
+			if (
+				(response.status && response.status === 200) ||
+				response.status === 201
+			) {
 				return response.data;
 			}
 
@@ -65,7 +71,7 @@ const recordSlice = createSlice({
 				state.loading = true;
 			})
 			.addCase(getAllRecords.fulfilled, (state, action: PayloadAction<any>) => {
-				// state.recordings = action.payload;
+				state.recordings = action.payload.data.data;
 				state.loading = false;
 			})
 			.addCase(getAllRecords.rejected, (state, action: PayloadAction<any>) => {
@@ -78,9 +84,9 @@ const recordSlice = createSlice({
 			.addCase(
 				CreateNewRecord.fulfilled,
 				(state, action: PayloadAction<any>) => {
-					// state.recordings = action.payload;
+					state.recording = action.payload.data.data;
 					state.loading = false;
-					console.log(action.payload);
+					toast.success('new record was created');
 				}
 			)
 			.addCase(
@@ -93,5 +99,4 @@ const recordSlice = createSlice({
 	},
 });
 
-// export const { } = featureSlice.actions;
 export default recordSlice.reducer;

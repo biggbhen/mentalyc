@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const { body, validationResult, check } = require('express-validator');
 const { v4: uuidv4 } = require('uuid');
-
 const SessionSchema = require('../models/session');
+const { upload } = require('../middleware/upload');
+const cloudinary = require('../middleware/cloudinary');
 
 // @route     GET api/recording
 // @desc      get all audio recordings
@@ -83,9 +84,17 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
 	try {
-		const { name, title, duration } = req.body;
+		if (!req.files.audio || !req.body) {
+			return res.status(400).json({ error: 'No Image File found.' });
+		}
 
-		const audioFile = req.files;
+		const audioFile = req.files.audio;
+		const cloudinaryResult = await cloudinary.uploader.upload(audioFile.path, {
+			folder: 'mentalyc',
+			resource_type: 'raw',
+		});
+
+		const { name, title, duration } = req.body;
 
 		const audioId = uuidv4();
 
@@ -94,7 +103,7 @@ router.post('/', async (req, res) => {
 		const newSession = new SessionSchema({
 			name: name,
 			title: title,
-			recordName: audioFile.audio.originalFilename,
+			recordUrl: cloudinaryResult.secure_url,
 			recordId: audioId,
 			recordDuration: duration,
 			status: 'saved',
@@ -108,8 +117,6 @@ router.post('/', async (req, res) => {
 				data: savedSession,
 				message: 'Session saved successfully.',
 			});
-
-			// await uploadAudio(audioId, audioFile.buffer, savedSession.id, io);
 		} else {
 			res.status(500).json({
 				status: 'error',
@@ -120,7 +127,7 @@ router.post('/', async (req, res) => {
 			});
 		}
 	} catch (error) {
-		res.status(500).send('Server Error');
+		res.status(500).send(`Server Error: ${error.message}`);
 	}
 });
 

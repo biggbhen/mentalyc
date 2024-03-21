@@ -12,8 +12,22 @@ const storage = multer.diskStorage({
 	},
 });
 
+const fileFilter = (req, file, cb) => {
+	// check for file type andreturn response
+	if (
+		file.mimetype !== 'audio/mp3' ||
+		file.mimetype !== 'audio/webm' ||
+		file.mimetype !== 'audio/ogg'
+	) {
+		return cb(null, false, { error: 'Invalid file type' });
+	} else {
+		cb(null, true);
+	}
+};
+
 const upload = multer({
-	storage: storage,
-});
+	storage,
+	fileFilter,
+}).single('audio');
 
 module.exports = { upload };

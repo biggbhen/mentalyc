@@ -13,7 +13,7 @@ const SessionSchema = mongoose.Schema({
 		type: String,
 		default: 'pending',
 	},
-	recordName: {
+	recordUrl: {
 		type: String,
 		required: true,
 	},
