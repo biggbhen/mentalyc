@@ -30,6 +30,31 @@ export const getAllRecords = createAsyncThunk(
 	}
 );
 
+export const CreateNewRecord = createAsyncThunk(
+	'create/records',
+	async (formData: FormData, { rejectWithValue }) => {
+		try {
+			const response = await axios.post(
+				`http://localhost:5000/api/recording`,
+				formData,
+				{
+					headers: {
+						'Content-Type': 'multipart/form-data',
+					},
+				}
+			);
+
+			if (response.status && response.status === 200) {
+				return response.data;
+			}
+
+			return rejectWithValue(response.data);
+		} catch (error) {
+			return rejectWithValue(error);
+		}
+	}
+);
+
 const recordSlice = createSlice({
 	name: 'record',
 	initialState,
@@ -46,7 +71,25 @@ const recordSlice = createSlice({
 			.addCase(getAllRecords.rejected, (state, action: PayloadAction<any>) => {
 				state.loading = false;
 				state.error = action.payload;
-			});
+			})
+			.addCase(CreateNewRecord.pending, (state, action: PayloadAction<any>) => {
+				state.loading = true;
+			})
+			.addCase(
+				CreateNewRecord.fulfilled,
+				(state, action: PayloadAction<any>) => {
+					// state.recordings = action.payload;
+					state.loading = false;
+					console.log(action.payload);
+				}
+			)
+			.addCase(
+				CreateNewRecord.rejected,
+				(state, action: PayloadAction<any>) => {
+					state.loading = false;
+					state.error = action.payload;
+				}
+			);
 	},
 });
 

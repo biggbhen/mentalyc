@@ -5,17 +5,20 @@ import { recordSelector } from '../../app/feature/selector';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import MicIcon from '@mui/icons-material/Mic';
 import MicOffIcon from '@mui/icons-material/MicOff';
-import { getAllRecords } from '../../app/feature/feature';
 import { AppDispatch } from '../../app/store/store';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
+import { toast } from 'react-toastify';
+import { CreateNewRecord } from '../../app/feature/feature';
 
-type Props = {};
+type Props = {
+	handleModalClose: () => void;
+};
 
-const AudioRecorder: React.FC<Props> = () => {
+const AudioRecorder: React.FC<Props> = ({ handleModalClose }) => {
 	const selector = useSelector(recordSelector);
 	const dispatch = useDispatch<AppDispatch>();
-
 	const audioRef = useRef<HTMLAudioElement>(null);
+
 	const [permission, setPermission] = useState<boolean>(false);
 	const [recorder, setRecorder] = useState<MediaRecorder | null>(null);
 	const [stream, setStream] = useState<MediaStream | null>(null);
@@ -25,14 +28,7 @@ const AudioRecorder: React.FC<Props> = () => {
 	const [audioChunks, setAudioChunks] = useState<any>([]);
 	const [startTime, setStartTime] = useState<number | null>(null);
 	const [duration, setDuration] = useState<string | null>(null);
-
-	// React.useEffect(() => {
-	// 	dispatch(getAllRecords());
-	// 	// eslint-disable-next-line
-	// }, []);
-
-	// form state
-	const [formData, setFormData] = useState<any>({});
+	const [formItem, setFormItem] = useState<any>({});
 
 	// Get Microphone Permissions
 	const getMicrophonePermission = async () => {
@@ -50,51 +46,59 @@ const AudioRecorder: React.FC<Props> = () => {
 		} else {
 			alert('The MediaRecorder API is not supported in your browser.');
 		}
+
+		if (permission) {
+			toast.success('mic permission granted');
+		}
 	};
 
 	// start audio recording
 	const startRecording = async () => {
-		getMicrophonePermission();
-		setRecordingStatus('recording');
-		setStartTime(Date.now());
+		if (formItem.name && formItem.title) {
+			getMicrophonePermission();
+			setRecordingStatus('recording');
+			setStartTime(Date.now());
 
-		// Check if stream is not null before proceeding
-		if (stream) {
-			try {
-				let localAudioChunks: Blob[] = [];
-				// Create new Media recorder instance using the stream
-				const mediaRecorderInstance = new MediaRecorder(stream, {
-					mimeType: 'audio/webm',
-				});
-
-				mediaRecorderInstance.ondataavailable = (event: BlobEvent) => {
-					if (event.data && event.data.size > 0) {
-						localAudioChunks.push(event.data);
-					}
-				};
-
-				mediaRecorderInstance.onstop = () => {
-					const audioBlob = new Blob(localAudioChunks, {
-						type: 'audio/ogg; codec=opus',
+			// Check if stream is not null before proceeding
+			if (stream) {
+				try {
+					let localAudioChunks: Blob[] = [];
+					// Create new Media recorder instance using the stream
+					const mediaRecorderInstance = new MediaRecorder(stream, {
+						mimeType: 'audio/webm',
 					});
-					setAudioFile(audioBlob);
-					const audioUrl = URL.createObjectURL(audioBlob);
-					setAudio(audioUrl);
-					stream.getTracks().forEach(function (track) {
-						track.stop();
-					});
-				};
 
-				// Invokes the start method to start the recording process
-				mediaRecorderInstance.start();
-				setRecorder(mediaRecorderInstance);
-				setAudioChunks(localAudioChunks);
-			} catch (error) {
-				console.error('Error starting recording:', error);
+					mediaRecorderInstance.ondataavailable = (event: BlobEvent) => {
+						if (event.data && event.data.size > 0) {
+							localAudioChunks.push(event.data);
+						}
+					};
+
+					mediaRecorderInstance.onstop = () => {
+						const audioBlob = new Blob(localAudioChunks, {
+							type: 'audio/ogg; codec=opus',
+						});
+						setAudioFile(audioBlob);
+						const audioUrl = URL.createObjectURL(audioBlob);
+						setAudio(audioUrl);
+						stream.getTracks().forEach(function (track) {
+							track.stop();
+						});
+					};
+
+					// Invokes the start method to start the recording process
+					mediaRecorderInstance.start();
+					setRecorder(mediaRecorderInstance);
+					setAudioChunks(localAudioChunks);
+				} catch (error) {
+					console.error('Error starting recording:', error);
+				}
+			} else {
+				getMicrophonePermission();
+				console.error('Stream is null. Cannot start recording.');
 			}
 		} else {
-			getMicrophonePermission();
-			console.error('Stream is null. Cannot start recording.');
+			toast.error('fill empty fields');
 		}
 	};
 
@@ -120,24 +124,35 @@ const AudioRecorder: React.FC<Props> = () => {
 	};
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setFormData({
-			...formData,
+		setFormItem({
+			...formItem,
 			[e.target.name]: e.target.value,
 		});
 	};
 
 	const handleSubmit = () => {
-		if (audioRef.current) {
-			console.log({
-				...formData,
-				duration,
-				audioFile,
-			});
+		if (audioRef.current && formItem.name && formItem.title) {
+			const newSession = {
+				...formItem,
+				audio: audioFile,
+				duration: duration,
+			};
+			// create key - value pairs by appending newSession object to the FormData object
+			const formData = new FormData();
+			formData.append('name', newSession.name);
+			formData.append('title', newSession.title);
+			formData.append('audio', newSession.audio);
+			formData.append('duration', newSession.duration);
+
+			dispatch(CreateNewRecord(formData));
+		} else {
+			toast.warning('Fill and attach all fields');
 		}
 	};
 
 	React.useEffect(() => {
 		getMicrophonePermission();
+		// eslint-disable-next-line
 	}, []);
 
 	return (
@@ -155,7 +170,7 @@ const AudioRecorder: React.FC<Props> = () => {
 						name='name'
 						className='border border-[#E6E7EB] w-full p-2 rounded-[6px]'
 						onChange={handleChange}
-						value={formData.name}
+						value={formItem.name}
 					/>
 				</div>
 				<div>
@@ -168,62 +183,77 @@ const AudioRecorder: React.FC<Props> = () => {
 						name='title'
 						className='border border-[#E6E7EB] w-full p-2 rounded-[6px]'
 						onChange={handleChange}
-						value={formData.title}
+						value={formItem.title}
 					/>
 				</div>
-			</form>
 
-			<div className='flex justify-between mt-8'>
-				<div className=''>
-					{recordingStatus === 'recording' ? (
-						<Tooltip title='play'>
-							<IconButton sx={{ cursor: 'pointer' }} onClick={stopRecording}>
-								<StopCircleIcon sx={{ fontSize: '3rem', color: '#731054' }} />
-							</IconButton>
-						</Tooltip>
-					) : (
-						<Tooltip title='play'>
-							<IconButton sx={{ cursor: 'pointer' }} onClick={startRecording}>
-								<RadioButtonCheckedIcon
-									sx={{ fontSize: '3rem', color: '#731054' }}
-								/>
-							</IconButton>
-						</Tooltip>
-					)}
-				</div>
-
-				<div className='flex items-center gap-x-[10px]'>
-					{recordingStatus === 'stopped' ? (
-						<div className='audio-container'>
-							<audio src={audio} controls ref={audioRef}></audio>
-						</div>
-					) : recordingStatus === 'recording' ? (
-						<p className='text-sm'>recording...</p>
-					) : (
-						<p className='text-sm'>
-							Click on the record button to start recording
-						</p>
-					)}
-					<div className='rounded-full bg-[#731054] flex justify-center items-center w-[50px] h-[50px]'>
+				<div className='flex justify-between mt-8'>
+					<div className=''>
 						{recordingStatus === 'recording' ? (
-							<MicIcon sx={{ fontSize: '1.2rem', color: 'white' }} />
+							<Tooltip title='stop'>
+								<IconButton sx={{ cursor: 'pointer' }} onClick={stopRecording}>
+									<StopCircleIcon sx={{ fontSize: '3rem', color: '#731054' }} />
+								</IconButton>
+							</Tooltip>
 						) : (
-							<MicOffIcon sx={{ fontSize: '1.2rem', color: 'white' }} />
+							<Tooltip title='play'>
+								<IconButton sx={{ cursor: 'pointer' }} onClick={startRecording}>
+									<RadioButtonCheckedIcon
+										sx={{ fontSize: '3rem', color: '#731054' }}
+									/>
+								</IconButton>
+							</Tooltip>
 						)}
 					</div>
-				</div>
-			</div>
 
-			<div>
-				<Button
-					onClick={handleSubmit}
-					variant='outlined'
-					sx={{
-						marginTop: '1rem',
-					}}>
-					upload
-				</Button>
-			</div>
+					<div className='flex items-center gap-x-[10px]'>
+						{recordingStatus === 'stopped' ? (
+							<div className='audio-container'>
+								<audio src={audio} controls ref={audioRef}></audio>
+							</div>
+						) : recordingStatus === 'recording' ? (
+							<p className='text-sm'>recording...</p>
+						) : (
+							<p className='text-sm'>
+								Click on the record button to start recording
+							</p>
+						)}
+						<div className='rounded-full bg-[#731054] flex justify-center items-center w-[50px] h-[50px]'>
+							{recordingStatus === 'recording' ? (
+								<MicIcon sx={{ fontSize: '1.2rem', color: 'white' }} />
+							) : (
+								<MicOffIcon sx={{ fontSize: '1.2rem', color: 'white' }} />
+							)}
+						</div>
+					</div>
+				</div>
+
+				<div className='mt-8 flex justify-end gap-x-[1rem]'>
+					<Button
+						onClick={handleModalClose}
+						variant='outlined'
+						sx={{
+							color: '#731054',
+							borderColor: '#731054',
+							textTransform: 'none',
+						}}>
+						Cancel
+					</Button>
+					<Button
+						onClick={handleSubmit}
+						variant='contained'
+						sx={{
+							color: 'white',
+							backgroundColor: '#731054',
+							'&:hover': {
+								backgroundColor: '#731054',
+							},
+							textTransform: 'none',
+						}}>
+						Save
+					</Button>
+				</div>
+			</form>
 		</div>
 	);
 };

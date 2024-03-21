@@ -7,8 +7,9 @@ import RecordTable from '../components/Audio/Recordtable';
 
 type Props = {};
 
-const Home = (props: Props) => {
+const Home: React.FC<Props> = () => {
 	const [open, setOpen] = useState<boolean>(false);
+
 	const handleRecording = () => setOpen(!open);
 
 	const handleClose = (
@@ -20,6 +21,8 @@ const Home = (props: Props) => {
 			setOpen(false);
 		}
 	};
+
+	const handleModalClose = () => setOpen(false);
 
 	return (
 		<div>
@@ -64,7 +67,7 @@ const Home = (props: Props) => {
 				<RecordTable />
 			</div>
 			<Dialog onClose={handleClose} open={open}>
-				<AudioRecorder />
+				<AudioRecorder handleModalClose={handleModalClose} />
 			</Dialog>
 		</div>
 	);

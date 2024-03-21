@@ -1,8 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
 const { body, validationResult, check } = require('express-validator');
 const { v4: uuidv4 } = require('uuid');
 
@@ -41,52 +38,90 @@ router.get('/', async (req, res) => {
 // @route     POST api/recording
 // @desc      create new audio recording
 // @access    public
+// router.post('/', upload.single('audio'), async (req, res) => {
+// 	try {
+// 		console.log(req);
+// 		const { name, title, duration } = req.body;
+
+// 		const audioFile = req.file;
+
+// 		const recordId = uuidv4();
+
+// 		const io = req.io;
+
+// 		const newSession = new SessionSchema({
+// 			name: name,
+// 			title: title,
+// 			recordName: audioFile,
+// 			recordId: recordId,
+// 			recordDuration: duration,
+// 			status: 'done',
+// 		});
+
+// 		const session = await newSession.save();
+
+// 		if (session) {
+// 			res.status(201).json({
+// 				status: 'success',
+// 				data: session,
+// 				message: 'Record saved successfully.',
+// 			});
+// 		} else {
+// 			res.status(404).json({
+// 				status: 'error',
+// 				error: {
+// 					message: 'Failed to save record.',
+// 					details: 'An error occurred while processing the request.',
+// 				},
+// 			});
+// 		}
+// 	} catch (error) {
+// 		console.log(error);
+// 		res.status(500).send('Server Error');
+// 	}
+// });
+
 router.post('/', async (req, res) => {
-	const errors = validationResult(req);
-	if (!errors.isEmpty()) {
-		return res.status(400).json({ errors: errors.array() });
-	}
 	try {
-		if (!req.file || !req.body) {
-			return res.status(400).json({ error: 'No record found.' });
-		}
 		const { name, title, duration } = req.body;
 
-		const audioFile = req.file;
+		const audioFile = req.files;
 
-		const recordId = uuidv4();
+		const audioId = uuidv4();
 
 		const io = req.io;
 
 		const newSession = new SessionSchema({
 			name: name,
 			title: title,
-			recordName: audioFile.originalname,
-			recordId: recordId,
+			recordName: audioFile.audio.originalFilename,
+			recordId: audioId,
 			recordDuration: duration,
-			status: 'done',
+			status: 'saved',
 		});
 
-		const session = await newSession.save();
+		const savedSession = await newSession.save();
 
-		if (session) {
+		if (savedSession) {
 			res.status(201).json({
 				status: 'success',
-				data: session,
-				message: 'Record saved successfully.',
+				data: savedSession,
+				message: 'Session saved successfully.',
 			});
+
+			// await uploadAudio(audioId, audioFile.buffer, savedSession.id, io);
 		} else {
-			res.status(404).json({
+			res.status(500).json({
 				status: 'error',
 				error: {
-					message: 'Failed to save record.',
+					message: 'Failed to save the session.',
 					details: 'An error occurred while processing the request.',
 				},
 			});
 		}
 	} catch (error) {
-		console.log(error);
 		res.status(500).send('Server Error');
 	}
 });
+
 module.exports = router;

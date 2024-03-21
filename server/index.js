@@ -29,6 +29,7 @@ app.use(express.json({ extended: false }));
 
 const server = http.createServer(app);
 
+// Create a Socket.IO server with the HTTP server
 const io = new Server(server, {
 	cors: {
 		origin: '*',
@@ -42,7 +43,6 @@ io.on('connection', (socket) => {
 	socket.on('send_message', (message) => console.log(message));
 });
 
-// basic home route
 app.get('/', (req, res) => {
 	res.send('Welcome to Mentalyc...');
 });
