@@ -11,13 +11,13 @@ Welcome to the Therapist Recording Application! This application provides therap
 * Link to project: https://mentalyc-bennjamin.netlify.app
 
 <!-- Tools and Approach -->
-## Tools and approach
+## Features
 
 Tech used: React, Tailwind, Typescript, Node, Express, Cloudinary, MUI, MongoDB.
 
 This react application is built to resolve therapists concerns regarding the safety of their recordings, the interface prioritizes reliability. Therapists are assured that their files are securely uploaded and processed before proceeding to new recordings. The interface supports seamless transition between sessions, allowing therapists to submit recordings for processing after each session and start a new recording promptly.
 
-* Implemented from scratch using browser Media API, ensuring a seamless recording experience for therapists.
+* Utilizes browser Media API to facilitate seamless recording of therapy sessions directly from the therapist's device.
 * Therapists can view a list of all their recordings, including name, timestamp, length, and status. The status updates in real-time as recordings are uploaded and processed.
 * Therapists can upload a new recording session .
 * Therapist can delete a recorded session
