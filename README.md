@@ -11,7 +11,7 @@ Mentalyc is a tool that helps therapists automatically write their therapy notes
 * Link to project: https://mentalyc-bennjamin.netlify.app
 
 <!-- GETTING STARTED -->
-## Getting Started
+## Tools and approach
 
 This is an example of how you may give instructions on setting up your project locally.
 To get a local copy up and running follow these simple example steps.
