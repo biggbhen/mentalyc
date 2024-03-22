@@ -26,7 +26,9 @@ This react application is built to resolve therapists concerns regarding the saf
 * Therapist can Verify if the audio microphone access is enabled before starting a recording session.
 
 ## Optimizations
-
+Future optimizations which can be included to this application includes:
+* Allow flexibity to select multiple devices
+* Generate Notes from recorded sessions
 
 
 ### Installation
