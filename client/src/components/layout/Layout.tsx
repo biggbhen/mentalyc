@@ -11,7 +11,7 @@ const Layout = (props: Props) => {
 		<div>
 			<Header />
 			<Sidebar />
-			<div className='pl-[250px] mt-[80px] pr-[50px]'>
+			<div className='pl-[30px] md:pl-[250px] mt-[80px] pr-[30px] md:pr-[50px]'>
 				<Outlet />
 			</div>
 		</div>

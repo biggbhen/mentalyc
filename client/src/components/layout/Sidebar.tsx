@@ -10,7 +10,7 @@ type Props = {};
 
 const Sidebar = (props: Props) => {
 	return (
-		<div className='fixed top-0 bottom-0 w-[200px] shadow-md z-40 bg-[#FAFAFA] pt-[50px] pb-[20px] flex items-center flex-col'>
+		<div className='fixed top-0 bottom-0 w-[200px] shadow-md z-40 bg-[#FAFAFA] pt-[50px] pb-[20px] items-center flex-col hidden md:flex'>
 			<figure className=''>
 				<img src={RoundLogo} alt='icon' className='rounded-full w-[70px]' />
 			</figure>
@@ -18,7 +18,7 @@ const Sidebar = (props: Props) => {
 				<li>
 					<Link
 						to='/'
-						className='flex gap-x-[10px] items-center text-sm py-[10px] hover:bg-[#FFF0F7] cursor-pointer'>
+						className='flex gap-x-[10px] items-center text-sm px-[20px] py-[10px]  cursor-pointer hover:bg-[#FFF0F7]'>
 						<img src={recordIcon} alt='icon' />
 						Record
 					</Link>
@@ -26,16 +26,16 @@ const Sidebar = (props: Props) => {
 				<li>
 					<Link
 						to='/recordings'
-						className='flex gap-x-[10px] items-center text-sm py-[10px] hover:bg-[#FFF0F7] cursor-pointer'>
+						className='flex gap-x-[10px] items-center text-sm px-[20px] py-[10px]  cursor-pointer hover:bg-[#FFF0F7]'>
 						<img src={recordListIcon} alt='icon' />
 						Recordings List
 					</Link>
 				</li>
-				<li className='flex gap-x-[10px] items-center text-sm py-[10px] hover:bg-[#FFF0F7] cursor-pointer'>
+				<li className='flex gap-x-[10px] items-center text-sm px-[20px] py-[10px]  cursor-pointer hover:bg-[#FFF0F7]'>
 					<img src={settingsIcon} alt='icon' />
 					Settings
 				</li>
-				<li className='flex gap-x-[10px] items-center text-sm py-[10px] hover:bg-[#FFF0F7] cursor-pointer'>
+				<li className='flex gap-x-[10px] items-center text-sm px-[20px] py-[10px]  cursor-pointer hover:bg-[#FFF0F7]'>
 					<img src={helpIcon} alt='icon' />
 					Help
 				</li>
