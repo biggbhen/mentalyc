@@ -25,13 +25,9 @@ This react application is built to resolve therapists concerns regarding the saf
 * Therapist can delete a recorded session
 * Therapist can Verify if the audio microphone access is enabled before starting a recording session.
 
-### Prerequisites
+## Optimizations
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+
 
 ### Installation
 
