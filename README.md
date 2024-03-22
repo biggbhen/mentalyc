@@ -18,7 +18,9 @@ Tech used: React, Tailwind, Typescript, Node, Express, Cloudinary, MUI, MongoDB.
 This react application is built to resolve therapists concerns regarding the safety of their recordings, the interface prioritizes reliability. Therapists are assured that their files are securely uploaded and processed before proceeding to new recordings. The interface supports seamless transition between sessions, allowing therapists to submit recordings for processing after each session and start a new recording promptly.
 
 * Utilizes browser Media API to facilitate seamless recording of therapy sessions directly from the therapist's device.
-* Therapists can view a list of all their recordings, including name, timestamp, length, and status. The status updates in real-time as recordings are uploaded and processed.
+* Allows therapists to view and manage their recordings, including name, timestamp, length, and status, with real-time updates as recordings are uploaded and processed.
+* Integrates with MongoDB and Express to persist recordings securely and reliably, ensuring data integrity and accessibility.
+* Utilizes Cloudinary for efficient and secure file storage, enabling therapists to store and retrieve recordings seamlessly.
 * Therapists can upload a new recording session .
 * Therapist can delete a recorded session
 * Therapist can Verify if the audio microphone access is enabled before starting a recording session.
