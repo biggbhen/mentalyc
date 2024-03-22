@@ -59,18 +59,7 @@ _Below is an example of how you can instruct your audience on installing and set
    ```js
   npm run start
    ```
-7. start localhost at port 3000
-   ```js
-  npm run start
-   ```
-8. start localhost at port 3000
-   ```js
-  npm run start
-   ```
-9. start localhost at port 3000
-   ```js
-  npm run start
-   ```
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
