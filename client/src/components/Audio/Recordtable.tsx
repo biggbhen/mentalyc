@@ -10,8 +10,10 @@ import Paper from '@mui/material/Paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { recordSelector } from '../../app/feature/selector';
 import { AppDispatch } from '../../app/store/store';
-import { getAllRecords } from '../../app/feature/feature';
-import { Skeleton } from '@mui/material';
+import { deleteRecord, getAllRecords } from '../../app/feature/feature';
+import { Button, Dialog, IconButton, Skeleton, Tooltip } from '@mui/material';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import deleteRecordIcon from '../../assets/3024051.jpg';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
 	[`&.${tableCellClasses.head}`]: {
@@ -38,6 +40,9 @@ export default function RecordTable() {
 	const selector = useSelector(recordSelector);
 	const dispatch = useDispatch<AppDispatch>();
 
+	const [deleteRecordModal, setDeleteRecordModal] =
+		React.useState<boolean>(false);
+	const [recordId, setRecordId] = React.useState<string>('');
 	React.useEffect(() => {
 		dispatch(getAllRecords());
 	}, [dispatch]); // Dispatch action when component mounts
@@ -53,10 +58,8 @@ export default function RecordTable() {
 	}, [selector.recordings]); // Recompute data state when selector.recordings changes
 
 	// date converter
-
 	const sessionDate = (dateString: string) => {
 		const dateObject = new Date(dateString);
-
 		const day = dateObject.getUTCDate();
 		const month = dateObject.getUTCMonth() + 1; // Months are zero-indexed, so we add 1
 		const year = dateObject.getUTCFullYear();
@@ -64,73 +67,131 @@ export default function RecordTable() {
 		return `${day}/${month}/${year}`;
 	};
 
+	// toggle delete record modal
+	const handleDelete = ({ id }: { id: string }) => {
+		setDeleteRecordModal(!deleteRecordModal);
+		setRecordId(id);
+	};
+
+	// delete recording from database
+	const removeItem = (value: string) => {
+		dispatch(deleteRecord(value));
+	};
+
 	return (
-		<TableContainer component={Paper}>
-			<Table sx={{ minWidth: 700 }} aria-label='customized table'>
-				<TableHead>
-					<TableRow>
-						<StyledTableCell>Name</StyledTableCell>
-						<StyledTableCell align='center'>Title</StyledTableCell>
-						<StyledTableCell align='center'>Duration</StyledTableCell>
-						<StyledTableCell align='center'>File</StyledTableCell>
-						<StyledTableCell align='center'>Date</StyledTableCell>
-						<StyledTableCell align='center'>Status</StyledTableCell>
-					</TableRow>
-				</TableHead>
-				<TableBody>
-					{data.length > 0 ? (
-						data.map((item: any) => (
-							<StyledTableRow key={item._id}>
+		<div>
+			<TableContainer component={Paper}>
+				<Table sx={{ minWidth: 700 }} aria-label='customized table'>
+					<TableHead>
+						<TableRow>
+							<StyledTableCell>Name</StyledTableCell>
+							<StyledTableCell align='center'>Title</StyledTableCell>
+							<StyledTableCell align='center'>Duration</StyledTableCell>
+							<StyledTableCell align='center'>File</StyledTableCell>
+							<StyledTableCell align='center'>Date</StyledTableCell>
+							<StyledTableCell align='center'>Status</StyledTableCell>
+						</TableRow>
+					</TableHead>
+					<TableBody>
+						{data.length > 0 ? (
+							data.map((item: any) => (
+								<StyledTableRow key={item._id}>
+									<StyledTableCell
+										component='th'
+										scope='row'
+										sx={{ whiteSpace: 'noWrap' }}>
+										{item.name}
+									</StyledTableCell>
+									<StyledTableCell sx={{ whiteSpace: 'noWrap' }} align='center'>
+										{item.title}
+									</StyledTableCell>
+									<StyledTableCell align='center'>
+										{item.recordDuration}
+									</StyledTableCell>
+									<StyledTableCell align='center'>
+										<div className='audio-container'>
+											<audio src={item.recordUrl} controls></audio>
+										</div>
+									</StyledTableCell>
+									<StyledTableCell align='center'>
+										{sessionDate(item.date)}
+									</StyledTableCell>
+									<StyledTableCell align='center' sx={{ color: 'green' }}>
+										<div className='flex gap-x-[10px] items-center'>
+											{item.status}
+											<Tooltip title='delete'>
+												<IconButton
+													sx={{ cursor: 'pointer' }}
+													onClick={() => handleDelete({ id: item._id })}>
+													<DeleteOutlineIcon sx={{ fontSize: '25px' }} />
+												</IconButton>
+											</Tooltip>
+										</div>
+									</StyledTableCell>
+								</StyledTableRow>
+							))
+						) : (
+							<StyledTableRow>
 								<StyledTableCell
 									component='th'
 									scope='row'
 									sx={{ whiteSpace: 'noWrap' }}>
-									{item.name}
+									<Skeleton variant='rectangular' width={150} height={40} />
 								</StyledTableCell>
 								<StyledTableCell sx={{ whiteSpace: 'noWrap' }} align='center'>
-									{item.title}
+									<Skeleton variant='rectangular' width={150} height={40} />
 								</StyledTableCell>
 								<StyledTableCell align='center'>
-									{item.recordDuration}
+									<Skeleton variant='rectangular' width={150} height={40} />
 								</StyledTableCell>
 								<StyledTableCell align='center'>
-									<div className='audio-container'>
-										<audio src={item.recordUrl} controls></audio>
-									</div>
+									<Skeleton variant='rectangular' width={150} height={40} />
 								</StyledTableCell>
 								<StyledTableCell align='center'>
-									{sessionDate(item.date)}
+									<Skeleton variant='rectangular' width={150} height={40} />
 								</StyledTableCell>
-								<StyledTableCell align='center'>{item.status}</StyledTableCell>
+								<StyledTableCell align='center'>
+									<Skeleton variant='rectangular' width={150} height={40} />
+								</StyledTableCell>
 							</StyledTableRow>
-						))
-					) : (
-						<StyledTableRow>
-							<StyledTableCell
-								component='th'
-								scope='row'
-								sx={{ whiteSpace: 'noWrap' }}>
-								<Skeleton variant='rectangular' width={150} height={40} />
-							</StyledTableCell>
-							<StyledTableCell sx={{ whiteSpace: 'noWrap' }} align='center'>
-								<Skeleton variant='rectangular' width={150} height={40} />
-							</StyledTableCell>
-							<StyledTableCell align='center'>
-								<Skeleton variant='rectangular' width={150} height={40} />
-							</StyledTableCell>
-							<StyledTableCell align='center'>
-								<Skeleton variant='rectangular' width={150} height={40} />
-							</StyledTableCell>
-							<StyledTableCell align='center'>
-								<Skeleton variant='rectangular' width={150} height={40} />
-							</StyledTableCell>
-							<StyledTableCell align='center'>
-								<Skeleton variant='rectangular' width={150} height={40} />
-							</StyledTableCell>
-						</StyledTableRow>
-					)}
-				</TableBody>
-			</Table>
-		</TableContainer>
+						)}
+					</TableBody>
+				</Table>
+			</TableContainer>
+			<Dialog
+				onClose={() => setDeleteRecordModal(false)}
+				open={deleteRecordModal}>
+				<div className='p-[30px] w-[350px]'>
+					<div className='w-[200px] mx-auto'>
+						<img src={deleteRecordIcon} alt='icon' />
+					</div>
+					<p className='text-center mt-6'>delete recording session?</p>
+					<div className='flex justify-end gap-x-[1rem] mt-8'>
+						<Button
+							variant='outlined'
+							sx={{
+								borderColor: '#731054',
+								color: '#731054',
+								'&:hover': {
+									borderColor: '#731054',
+									'&:hover': { backgroundColor: 'transparent' },
+								},
+							}}>
+							No
+						</Button>
+						<Button
+							variant='contained'
+							sx={{
+								backgroundColor: '#731054',
+								color: 'white',
+								'&:hover': { backgroundColor: '#731054' },
+							}}
+							onClick={() => removeItem(recordId)}>
+							Yes
+						</Button>
+					</div>
+				</div>
+			</Dialog>
+		</div>
 	);
 }

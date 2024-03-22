@@ -8,7 +8,7 @@ import MicOffIcon from '@mui/icons-material/MicOff';
 import { AppDispatch } from '../../app/store/store';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
 import { toast } from 'react-toastify';
-import { CreateNewRecord } from '../../app/feature/feature';
+import { CreateNewRecord, getAllRecords } from '../../app/feature/feature';
 
 type Props = {
 	handleModalClose: () => void;
@@ -155,6 +155,13 @@ const AudioRecorder: React.FC<Props> = ({ handleModalClose }) => {
 		// eslint-disable-next-line
 	}, []);
 
+	React.useEffect(() => {
+		if (selector.created === true) {
+			handleModalClose();
+		}
+		// eslint-disable-next-line
+	}, [selector.created]);
+
 	return (
 		<div className='p-[20px] w-[500px]'>
 			<h2 className='mb-8 font-semibold'>Record a new session</h2>
@@ -190,13 +197,13 @@ const AudioRecorder: React.FC<Props> = ({ handleModalClose }) => {
 				<div className='flex justify-between mt-8'>
 					<div className=''>
 						{recordingStatus === 'recording' ? (
-							<Tooltip title='stop'>
+							<Tooltip title='Stop'>
 								<IconButton sx={{ cursor: 'pointer' }} onClick={stopRecording}>
 									<StopCircleIcon sx={{ fontSize: '3rem', color: '#731054' }} />
 								</IconButton>
 							</Tooltip>
 						) : (
-							<Tooltip title='play'>
+							<Tooltip title='Record'>
 								<IconButton sx={{ cursor: 'pointer' }} onClick={startRecording}>
 									<RadioButtonCheckedIcon
 										sx={{ fontSize: '3rem', color: '#731054' }}

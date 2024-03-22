@@ -7,6 +7,8 @@ interface RootState {
 	error: any;
 	recordings: any;
 	recording: any;
+	created: boolean;
+	deleted: boolean;
 }
 
 const initialState: RootState = {
@@ -14,6 +16,8 @@ const initialState: RootState = {
 	error: null,
 	recordings: [],
 	recording: [],
+	created: false,
+	deleted: false,
 };
 
 export const getAllRecords = createAsyncThunk(
@@ -61,10 +65,39 @@ export const CreateNewRecord = createAsyncThunk(
 	}
 );
 
+export const deleteRecord = createAsyncThunk(
+	'delete/records',
+	async (id: string, { rejectWithValue }) => {
+		try {
+			const response = await axios.delete(
+				`http://localhost:5000/api/recording?id=${id}`
+			);
+
+			if (
+				(response.status && response.status === 200) ||
+				response.status === 201
+			) {
+				return response.data;
+			}
+
+			return rejectWithValue(response.data);
+		} catch (error) {
+			return rejectWithValue(error);
+		}
+	}
+);
+
 const recordSlice = createSlice({
 	name: 'record',
 	initialState,
-	reducers: {},
+	reducers: {
+		resetCreated: (state, action: PayloadAction<any>) => {
+			state.created = action.payload;
+		},
+		resetDeleted: (state, action: PayloadAction<any>) => {
+			state.deleted = action.payload;
+		},
+	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(getAllRecords.pending, (state, action: PayloadAction<any>) => {
@@ -86,6 +119,7 @@ const recordSlice = createSlice({
 				(state, action: PayloadAction<any>) => {
 					state.recording = action.payload.data.data;
 					state.loading = false;
+					state.created = true;
 					toast.success('new record was created');
 				}
 			)
@@ -95,8 +129,21 @@ const recordSlice = createSlice({
 					state.loading = false;
 					state.error = action.payload;
 				}
-			);
+			)
+			.addCase(deleteRecord.pending, (state, action: PayloadAction<any>) => {
+				state.loading = true;
+			})
+			.addCase(deleteRecord.fulfilled, (state, action: PayloadAction<any>) => {
+				state.loading = false;
+				state.deleted = true;
+				toast.success('record was deleted successfully');
+			})
+			.addCase(deleteRecord.rejected, (state, action: PayloadAction<any>) => {
+				state.loading = false;
+				state.error = action.payload;
+			});
 	},
 });
 
+export const { resetCreated, resetDeleted } = recordSlice.actions;
 export default recordSlice.reducer;

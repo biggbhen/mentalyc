@@ -106,7 +106,7 @@ router.post('/', async (req, res) => {
 			recordUrl: cloudinaryResult.secure_url,
 			recordId: audioId,
 			recordDuration: duration,
-			status: 'saved',
+			status: 'success',
 		});
 
 		const savedSession = await newSession.save();
@@ -128,6 +128,43 @@ router.post('/', async (req, res) => {
 		}
 	} catch (error) {
 		res.status(500).send(`Server Error: ${error.message}`);
+	}
+});
+
+// @route     DELETE api/recording
+// @desc      to delete a single recording
+// @access    public
+router.delete('/', async (req, res) => {
+	try {
+		const { id } = req.query;
+		console.log(id);
+
+		let session = await SessionSchema.findById(id);
+
+		if (!session) {
+			return res.status(404).json({
+				status: 'failed',
+				message: 'No recording found',
+			});
+		}
+
+		const deletedSession = await SessionSchema.deleteOne({ _id: id });
+
+		if (deletedSession) {
+			res.status(200).json({
+				status: 'success',
+				data: deletedSession,
+				message: 'Recording deleted successfully',
+			});
+		} else {
+			res.status(404).json({
+				status: 'fail',
+				message: 'Recording not found',
+			});
+		}
+	} catch (error) {
+		console.log(error);
+		res.status(500).send('Server Error');
 	}
 });
 
