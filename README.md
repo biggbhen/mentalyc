@@ -1,4 +1,4 @@
-  <h3 align="center">Mentalyc App</h3>
+  <h3 align="center">Therapist Recording Application</h3>
 
 
 
@@ -19,6 +19,9 @@ This react application is built to resolve therapists concerns regarding the saf
 
 * Implemented from scratch using browser Media API, ensuring a seamless recording experience for therapists.
 * Therapists can view a list of all their recordings, including name, timestamp, length, and status. The status updates in real-time as recordings are uploaded and processed.
+* Therapists can upload a new recording session .
+* Therapist can delete a recorded session
+* Therapist can Verify if the audio microphone access is enabled before starting a recording session.
 
 ### Prerequisites
 
