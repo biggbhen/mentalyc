@@ -182,7 +182,8 @@ export default function RecordTable() {
 									borderColor: '#731054',
 									'&:hover': { backgroundColor: 'transparent' },
 								},
-							}}>
+							}}
+							onClick={() => setDeleteRecordModal(false)}>
 							No
 						</Button>
 						<Button
