@@ -47,7 +47,7 @@ _Below is an example of how you can instruct your audience on installing and set
    ```js
     $ npm install
    ```
-4. Enter client 
+5. Enter client 
    ```js
      $ cd mentalyc
    ```
@@ -55,9 +55,21 @@ _Below is an example of how you can instruct your audience on installing and set
    ```js
     $ npm install
    ```
-4. Enter your API in `config.js`
+6. start localhost at port 3000
    ```js
-   const API_KEY = 'ENTER YOUR API';
+  npm run start
+   ```
+7. start localhost at port 3000
+   ```js
+  npm run start
+   ```
+8. start localhost at port 3000
+   ```js
+  npm run start
+   ```
+9. start localhost at port 3000
+   ```js
+  npm run start
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
