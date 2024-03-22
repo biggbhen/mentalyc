@@ -8,7 +8,11 @@ import MicOffIcon from '@mui/icons-material/MicOff';
 import { AppDispatch } from '../../app/store/store';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
 import { toast } from 'react-toastify';
-import { CreateNewRecord, getAllRecords } from '../../app/feature/feature';
+import {
+	CreateNewRecord,
+	getAllRecords,
+	resetUpdateProgress,
+} from '../../app/feature/feature';
 
 type Props = {
 	handleModalClose: () => void;
@@ -158,6 +162,7 @@ const AudioRecorder: React.FC<Props> = ({ handleModalClose }) => {
 	React.useEffect(() => {
 		if (selector.created === true) {
 			handleModalClose();
+			dispatch(resetUpdateProgress(0));
 		}
 		// eslint-disable-next-line
 	}, [selector.created]);
@@ -261,6 +266,16 @@ const AudioRecorder: React.FC<Props> = ({ handleModalClose }) => {
 					</Button>
 				</div>
 			</form>
+
+			{selector.percentCompleted > 0 && (
+				<div className='w-full bg-gray-200 rounded-full dark:bg-gray-700 mt-6'>
+					<div
+						className='bg-[#731054] text-[0.6rem] text-blue-100 text-center p-[2px] leading-none rounded-full'
+						style={{ width: `${selector.percentCompleted}%` }}>
+						{`${selector.percentCompleted}%`}
+					</div>
+				</div>
+			)}
 		</div>
 	);
 };

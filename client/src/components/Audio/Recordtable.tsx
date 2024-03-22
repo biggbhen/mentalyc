@@ -10,7 +10,11 @@ import Paper from '@mui/material/Paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { recordSelector } from '../../app/feature/selector';
 import { AppDispatch } from '../../app/store/store';
-import { deleteRecord, getAllRecords } from '../../app/feature/feature';
+import {
+	deleteRecord,
+	getAllRecords,
+	resetDeleted,
+} from '../../app/feature/feature';
 import { Button, Dialog, IconButton, Skeleton, Tooltip } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import deleteRecordIcon from '../../assets/3024051.jpg';
@@ -76,6 +80,8 @@ export default function RecordTable() {
 	// delete recording from database
 	const removeItem = (value: string) => {
 		dispatch(deleteRecord(value));
+		setDeleteRecordModal(false);
+		dispatch(resetDeleted(false));
 	};
 
 	return (

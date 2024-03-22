@@ -9,6 +9,7 @@ interface RootState {
 	recording: any;
 	created: boolean;
 	deleted: boolean;
+	percentCompleted: number;
 }
 
 const initialState: RootState = {
@@ -18,6 +19,7 @@ const initialState: RootState = {
 	recording: [],
 	created: false,
 	deleted: false,
+	percentCompleted: 0,
 };
 
 export const getAllRecords = createAsyncThunk(
@@ -39,8 +41,9 @@ export const getAllRecords = createAsyncThunk(
 
 export const CreateNewRecord = createAsyncThunk(
 	'create/records',
-	async (formData: FormData, { rejectWithValue }) => {
+	async (formData: FormData, { rejectWithValue, dispatch }) => {
 		try {
+			let completed = false;
 			const response = await axios.post(
 				`http://localhost:5000/api/recording`,
 				formData,
@@ -48,13 +51,34 @@ export const CreateNewRecord = createAsyncThunk(
 					headers: {
 						'Content-Type': 'multipart/form-data',
 					},
+					onUploadProgress: function (progressEvent: any) {
+						const totalSize = progressEvent.total;
+						let uploaded = 0;
+
+						const interval = setInterval(() => {
+							uploaded += 5000; // Simulate upload progress by increasing uploaded size
+
+							// Ensure uploaded doesn't exceed totalSize
+							uploaded = Math.min(uploaded, totalSize);
+
+							const percentCompleted = Math.round((uploaded * 100) / totalSize);
+
+							// Dispatch an action here to update the state with percentCompleted
+							dispatch(updateProgress(percentCompleted));
+
+							if (uploaded >= totalSize) {
+								clearInterval(interval); // Stop the interval when upload is complete
+								// Check if the response status is 200 and progress is 100%
+								if (percentCompleted === 100) {
+									completed = true;
+								}
+							}
+						}, 100); // using interval delay of half a sec
+					},
 				}
 			);
 
-			if (
-				(response.status && response.status === 200) ||
-				response.status === 201
-			) {
+			if (completed && response.data) {
 				return response.data;
 			}
 
@@ -96,6 +120,12 @@ const recordSlice = createSlice({
 		},
 		resetDeleted: (state, action: PayloadAction<any>) => {
 			state.deleted = action.payload;
+		},
+		updateProgress(state, action: PayloadAction<any>) {
+			state.percentCompleted = action.payload;
+		},
+		resetUpdateProgress(state, action: PayloadAction<any>) {
+			state.percentCompleted = action.payload;
 		},
 	},
 	extraReducers: (builder) => {
@@ -145,5 +175,10 @@ const recordSlice = createSlice({
 	},
 });
 
-export const { resetCreated, resetDeleted } = recordSlice.actions;
+export const {
+	resetCreated,
+	resetDeleted,
+	updateProgress,
+	resetUpdateProgress,
+} = recordSlice.actions;
 export default recordSlice.reducer;

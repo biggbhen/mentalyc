@@ -92,6 +92,7 @@ router.post('/', async (req, res) => {
 		const cloudinaryResult = await cloudinary.uploader.upload(audioFile.path, {
 			folder: 'mentalyc',
 			resource_type: 'raw',
+			chunk_size: 2000000,
 		});
 
 		const { name, title, duration } = req.body;
