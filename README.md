@@ -64,6 +64,10 @@ _Below is an example of how you can instruct your audience on installing and set
     $cd ..
    $cd server
    ```
+6. run server
+   ```js
+   $npm run server
+   ```
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
