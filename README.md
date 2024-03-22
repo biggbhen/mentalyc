@@ -8,7 +8,7 @@
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
 Mentalyc is a tool that helps therapists automatically write their therapy notes using AI.
-Link to project: https://mentalyc-bennjamin.netlify.app
+* Link to project: https://mentalyc-bennjamin.netlify.app
 
 Here's why:
 * Your time should be focused on creating something amazing. A project that solves a problem and helps others
