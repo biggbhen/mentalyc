@@ -10,12 +10,15 @@
 Mentalyc is a tool that helps therapists automatically write their therapy notes using AI.
 * Link to project: https://mentalyc-bennjamin.netlify.app
 
-<!-- GETTING STARTED -->
+<!-- Tools and Approach -->
 ## Tools and approach
 
 Tech used: React, Tailwind, Typescript, Node, Express, Cloudinary, MUI, MongoDB.
 
-This react application is built to resolve therapists concerns regarding the safety of their recordings, the interface prioritizes reliability. Therapists are assured that their files are securely uploaded and processed before proceeding to new recordings. 
+This react application is built to resolve therapists concerns regarding the safety of their recordings, the interface prioritizes reliability. Therapists are assured that their files are securely uploaded and processed before proceeding to new recordings. The interface supports seamless transition between sessions, allowing therapists to submit recordings for processing after each session and start a new recording promptly.
+
+* Implemented from scratch using browser Media API, ensuring a seamless recording experience for therapists.
+* Therapists can view a list of all their recordings, including name, timestamp, length, and status. The status updates in real-time as recordings are uploaded and processed.
 
 ### Prerequisites
 
