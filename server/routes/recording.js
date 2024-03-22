@@ -39,48 +39,6 @@ router.get('/', async (req, res) => {
 // @route     POST api/recording
 // @desc      create new audio recording
 // @access    public
-// router.post('/', upload.single('audio'), async (req, res) => {
-// 	try {
-// 		console.log(req);
-// 		const { name, title, duration } = req.body;
-
-// 		const audioFile = req.file;
-
-// 		const recordId = uuidv4();
-
-// 		const io = req.io;
-
-// 		const newSession = new SessionSchema({
-// 			name: name,
-// 			title: title,
-// 			recordName: audioFile,
-// 			recordId: recordId,
-// 			recordDuration: duration,
-// 			status: 'done',
-// 		});
-
-// 		const session = await newSession.save();
-
-// 		if (session) {
-// 			res.status(201).json({
-// 				status: 'success',
-// 				data: session,
-// 				message: 'Record saved successfully.',
-// 			});
-// 		} else {
-// 			res.status(404).json({
-// 				status: 'error',
-// 				error: {
-// 					message: 'Failed to save record.',
-// 					details: 'An error occurred while processing the request.',
-// 				},
-// 			});
-// 		}
-// 	} catch (error) {
-// 		console.log(error);
-// 		res.status(500).send('Server Error');
-// 	}
-// });
 
 router.post('/', async (req, res) => {
 	try {
