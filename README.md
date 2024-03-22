@@ -15,6 +15,8 @@ Mentalyc is a tool that helps therapists automatically write their therapy notes
 
 Tech used: React, Tailwind, Typescript, Node, Express, Cloudinary, MUI, MongoDB.
 
+This react application is built to resolve therapists concerns regarding the safety of their recordings, the interface prioritizes reliability. Therapists are assured that their files are securely uploaded and processed before proceeding to new recordings. 
+
 ### Prerequisites
 
 This is an example of how to list things you need to use the software and how to install them.
