@@ -57,7 +57,12 @@ _Below is an example of how you can instruct your audience on installing and set
    ```
 6. start localhost at port 3000
    ```js
-  npm run start
+    npm run start
+   ```
+6. navigate to server
+   ```js
+    $cd ..
+   $cd server
    ```
 
 
