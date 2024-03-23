@@ -5,7 +5,8 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+[![<img width="1439" alt="Screenshot 2024-03-23 at 02 20 33" src="https://github.com/biggbhen/mentalyc/assets/96218403/0f21a378-0061-4406-9a2c-345f7f1cd6f2">
+](https://example.com)
 
 Welcome to the Therapist Recording Application! This application provides therapists with a user-friendly interface to securely record and manage their sessions with patients. Built with React for the frontend, Express for the backend, and MongoDB for data storage, along with Cloudinary for file storage, this application offers a comprehensive solution for therapists' recording needs.
 * Link to project: https://mentalyc-bennjamin.netlify.app
