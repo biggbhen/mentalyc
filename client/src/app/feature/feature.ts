@@ -78,10 +78,9 @@ export const CreateNewRecord = createAsyncThunk(
 				}
 			);
 
-			if (completed && response.data) {
+			if (response.data && completed) {
 				return response.data;
 			}
-
 			return rejectWithValue(response.data);
 		} catch (error) {
 			return rejectWithValue(error);

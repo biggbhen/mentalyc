@@ -10,7 +10,6 @@ import StopCircleIcon from '@mui/icons-material/StopCircle';
 import { toast } from 'react-toastify';
 import {
 	CreateNewRecord,
-	getAllRecords,
 	resetUpdateProgress,
 } from '../../app/feature/feature';
 
@@ -162,6 +161,7 @@ const AudioRecorder: React.FC<Props> = ({ handleModalClose }) => {
 	React.useEffect(() => {
 		if (selector.created === true) {
 			handleModalClose();
+			setStream(null);
 			dispatch(resetUpdateProgress(0));
 		}
 		// eslint-disable-next-line
@@ -202,33 +202,43 @@ const AudioRecorder: React.FC<Props> = ({ handleModalClose }) => {
 				<div className='flex justify-between mt-8'>
 					<div className=''>
 						{recordingStatus === 'recording' ? (
-							<Tooltip title='Stop'>
-								<IconButton sx={{ cursor: 'pointer' }} onClick={stopRecording}>
-									<StopCircleIcon sx={{ fontSize: '3rem', color: '#731054' }} />
-								</IconButton>
-							</Tooltip>
+							<div>
+								<Tooltip title='Stop'>
+									<IconButton
+										sx={{ cursor: 'pointer' }}
+										onClick={stopRecording}>
+										<StopCircleIcon
+											sx={{ fontSize: '3rem', color: '#731054' }}
+										/>
+									</IconButton>
+								</Tooltip>
+								<span className='text-sm'>
+									{stream !== null ? `Recording...` : `Click to record`}
+								</span>
+							</div>
 						) : (
-							<Tooltip title='Record'>
-								<IconButton sx={{ cursor: 'pointer' }} onClick={startRecording}>
-									<RadioButtonCheckedIcon
-										sx={{ fontSize: '3rem', color: '#731054' }}
-									/>
-								</IconButton>
-							</Tooltip>
+							<div>
+								<Tooltip title='Record'>
+									<IconButton
+										sx={{ cursor: 'pointer' }}
+										onClick={startRecording}>
+										<RadioButtonCheckedIcon
+											sx={{ fontSize: '3rem', color: '#731054' }}
+										/>
+									</IconButton>
+								</Tooltip>
+								{audio === '' && (
+									<span className='text-sm'>Click to record</span>
+								)}
+							</div>
 						)}
 					</div>
 
 					<div className='flex items-center gap-x-[10px]'>
-						{recordingStatus === 'stopped' ? (
+						{recordingStatus === 'stopped' && (
 							<div className='audio-container'>
 								<audio src={audio} controls ref={audioRef}></audio>
 							</div>
-						) : recordingStatus === 'recording' ? (
-							<p className='text-sm'>recording...</p>
-						) : (
-							<p className='text-sm'>
-								Click on the record button to start recording
-							</p>
 						)}
 						<div className='rounded-full bg-[#731054] flex justify-center items-center w-[50px] h-[50px]'>
 							{recordingStatus === 'recording' ? (
@@ -242,7 +252,10 @@ const AudioRecorder: React.FC<Props> = ({ handleModalClose }) => {
 
 				<div className='mt-8 flex justify-end gap-x-[1rem]'>
 					<Button
-						onClick={handleModalClose}
+						onClick={() => {
+							handleModalClose();
+							setStream(null);
+						}}
 						variant='outlined'
 						sx={{
 							color: '#731054',
