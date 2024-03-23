@@ -96,7 +96,7 @@ watch demo video here: https://www.loom.com/share/6bd0daf0f0af42508555b4d293cab9
 ## Environmental variables
 * MONGODB_URI
 * API_KEY
-* CLOUD_NAME
+* CLOUD_NAME (cloudinary)
 * API_SECRET
 
 
