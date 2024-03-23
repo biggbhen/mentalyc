@@ -65,7 +65,11 @@ _Below is an example of how you can instruct your audience on installing and set
     $cd ..
    $cd server
    ```
-8. run server
+8. install dependencies in server
+   ```js
+    $npm install
+   ```
+9. run server
    ```js
    $npm run server
    ```
@@ -76,11 +80,9 @@ _Below is an example of how you can instruct your audience on installing and set
 
 
 <!-- USAGE EXAMPLES -->
-## Usage
+## Demo
+watch demo video here: https://www.loom.com/share/6bd0daf0f0af42508555b4d293cab9e0?sid=e73666e4-f6bf-43de-9622-cd740950d17a
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -89,9 +91,8 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
-
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+ [email@example.com](https://www.linkedin.com/in/biggkodes/)
+https://twitter.com/Bigcodes__
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
