@@ -94,10 +94,10 @@ watch demo video here: https://www.loom.com/share/6bd0daf0f0af42508555b4d293cab9
 
 <!-- env files -->
 ## Environmental variables
-MONGODB_URI
-API_KEY
-CLOUD_NAME
-API_SECRET
+* MONGODB_URI
+* API_KEY
+* CLOUD_NAME
+* API_SECRET
 
 
 <!-- CONTACT -->
