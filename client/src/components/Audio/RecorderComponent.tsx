@@ -28,7 +28,6 @@ const AudioRecorder: React.FC<Props> = ({ handleModalClose }) => {
 	const [recordingStatus, setRecordingStatus] = useState<string>('inactive');
 	const [audio, setAudio] = useState<string>('');
 	const [audioFile, setAudioFile] = useState<Blob | null>(null);
-	const [audioChunks, setAudioChunks] = useState<any>([]);
 	const [startTime, setStartTime] = useState<number | null>(null);
 	const [duration, setDuration] = useState<string | null>(null);
 	const [formItem, setFormItem] = useState<any>({});
@@ -92,7 +91,6 @@ const AudioRecorder: React.FC<Props> = ({ handleModalClose }) => {
 					// Invokes the start method to start the recording process
 					mediaRecorderInstance.start();
 					setRecorder(mediaRecorderInstance);
-					setAudioChunks(localAudioChunks);
 				} catch (error) {
 					console.error('Error starting recording:', error);
 				}
