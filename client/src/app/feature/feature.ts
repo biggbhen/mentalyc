@@ -21,12 +21,19 @@ const initialState: RootState = {
 	deleted: false,
 	percentCompleted: 0,
 };
+const getBaseUrl = () => {
+	if (window.location.hostname !== 'localhost') {
+		return `https://mentalyc-server.cyclic.app`;
+	} else {
+		return `http://localhost:5000`;
+	}
+};
 
 export const getAllRecords = createAsyncThunk(
 	'get/records',
 	async (payload, { rejectWithValue }) => {
 		try {
-			const response = await axios.get(`http://localhost:5000/api/recording`);
+			const response = await axios.get(`${getBaseUrl()}/api/recording`);
 
 			if (response.status && response.status === 200) {
 				return response.data;
@@ -45,7 +52,7 @@ export const CreateNewRecord = createAsyncThunk(
 		try {
 			let completed = false;
 			const response = await axios.post(
-				`http://localhost:5000/api/recording`,
+				`${getBaseUrl()}/api/recording`,
 				formData,
 				{
 					headers: {
@@ -68,19 +75,25 @@ export const CreateNewRecord = createAsyncThunk(
 
 							if (uploaded >= totalSize) {
 								clearInterval(interval); // Stop the interval when upload is complete
-								// Check if the response status is 200 and progress is 100%
+								// Check if the progress is 100%
 								if (percentCompleted === 100) {
 									completed = true;
 								}
 							}
-						}, 100); // using interval delay of half a sec
+						}, 100);
 					},
 				}
 			);
 
-			if (response.data && completed) {
+			// Wait until the upload is completed (progress reaches 100%)
+			while (!completed) {
+				await new Promise((resolve) => setTimeout(resolve, 100)); // Wait for 100ms
+			}
+
+			if (response.status === 200 || response.status === 201) {
 				return response.data;
 			}
+
 			return rejectWithValue(response.data);
 		} catch (error) {
 			return rejectWithValue(error);
@@ -93,7 +106,7 @@ export const deleteRecord = createAsyncThunk(
 	async (id: string, { rejectWithValue }) => {
 		try {
 			const response = await axios.delete(
-				`http://localhost:5000/api/recording?id=${id}`
+				`${getBaseUrl()}/api/recording?id=${id}`
 			);
 
 			if (
