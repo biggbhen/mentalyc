@@ -60,12 +60,12 @@ _Below is an example of how you can instruct your audience on installing and set
    ```js
     npm run start
    ```
-6. navigate to server
+7. navigate to server
    ```js
     $cd ..
    $cd server
    ```
-6. run server
+8. run server
    ```js
    $npm run server
    ```
