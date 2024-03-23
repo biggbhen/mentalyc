@@ -83,6 +83,8 @@ _Below is an example of how you can instruct your audience on installing and set
 ## Demo
 watch demo video here: https://www.loom.com/share/6bd0daf0f0af42508555b4d293cab9e0?sid=e73666e4-f6bf-43de-9622-cd740950d17a
 <img width="1439" alt="Screenshot 2024-03-23 at 01 29 10" src="https://github.com/biggbhen/mentalyc/assets/96218403/c40a7f26-46e3-4ce5-90f4-007dab202f90">
+<img width="1436" alt="Screenshot 2024-03-23 at 01 36 52" src="https://github.com/biggbhen/mentalyc/assets/96218403/1563db2a-0456-41dd-974c-a1cca32c9543">
+
 <img width="726" alt="Screenshot 2024-03-23 at 01 36 00" src="https://github.com/biggbhen/mentalyc/assets/96218403/302de43c-2f3f-42ea-97bc-e5ec7007d332">
 <img width="1436" alt="Screenshot 2024-03-23 at 01 37 35" src="https://github.com/biggbhen/mentalyc/assets/96218403/7bf40fc1-2356-4f3c-872a-d7c49cae2b4f">
 
