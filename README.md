@@ -9,7 +9,7 @@
 
 
 Welcome to the Therapist Recording Application! This application provides therapists with a user-friendly interface to securely record and manage their sessions with patients. Built with React for the frontend, Express for the backend, and MongoDB for data storage, along with Cloudinary for file storage, this application offers a comprehensive solution for therapists' recording needs.
-* Link to project: https://mentalyc-bennjamin.netlify.app
+* Link to project: https://[mentalyc-bennjamin.netlify.app](https://therapy-session.netlify.app/)
 
 <!-- Tools and Approach -->
 ## Features
