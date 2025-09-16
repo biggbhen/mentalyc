@@ -20,7 +20,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y \
           libwoff1 \
-          libvpx7 \
+          libvpx9 \
           libevent-2.1-7 \
           libopus0 \
           libharfbuzz-icu0 \
@@ -35,8 +35,7 @@ jobs:
           gstreamer1.0-plugins-bad \
           gstreamer1.0-libav \
           gstreamer1.0-tools \
-          libasound2
-
+          libasound2t64
     - name: Install Playwright Browsers
       run: npx playwright install
     - name: Run Playwright tests
