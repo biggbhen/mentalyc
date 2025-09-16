@@ -1,4 +1,4 @@
-  <h3 align="center">Mentalyc Therapist Recording Application</h3>
+  <h3 align="center">Therapist Recording Application</h3>
 
 
 
