@@ -23,7 +23,7 @@ const initialState: RootState = {
 };
 const getBaseUrl = () => {
 	if (window.location.hostname !== 'localhost') {
-		return `https://mentalyc-fbn7.onrender.com`;
+		return process.env.REACT_APP_BACKEND_URL;
 	} else {
 		return `http://localhost:5001`;
 	}
