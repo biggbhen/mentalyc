@@ -15,10 +15,11 @@ jobs:
         node-version: lts/*
     - name: Install dependencies
       run: npm ci
-    - name: Install system dependencies for Playwright
+    - name: Install system dependencies for Playwright (all browsers)
       run: |
         sudo apt-get update
         sudo apt-get install -y \
+          # Core deps (Chromium/Firefox/WebKit shared)
           libasound2t64 \
           libatk1.0-0 \
           libcups2t64 \
@@ -44,7 +45,29 @@ jobs:
           libxtst6 \
           fonts-liberation \
           libffi8 \
-          libx264-164
+          libx264-164 \
+          # WebKit extras
+          libwoff1 \
+          libvpx-dev \
+          libevent-2.1-7 \
+          libopus0 \
+          libharfbuzz-icu0 \
+          gstreamer1.0-libav \
+          gstreamer1.0-plugins-base \
+          gstreamer1.0-plugins-good \
+          gstreamer1.0-plugins-bad \
+          gstreamer1.0-plugins-ugly \
+          gstreamer1.0-alsa \
+          gstreamer1.0-gl \
+          gstreamer1.0-gtk3 \
+          gstreamer1.0-plugins-base-apps \
+          gstreamer1.0-pulseaudio \
+          libsecret-1-0 \
+          libhyphen0 \
+          libmanette-0.2-0 \
+          flite \
+          libgles2
+
 
     - name: Install Playwright Browsers
       run: npx playwright install
