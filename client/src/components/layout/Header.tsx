@@ -1,5 +1,5 @@
 import React from 'react';
-import { MdNotifications } from 'react-icons/md';
+// import { MdNotifications } from 'react-icons/md';
 
 type Props = {};
 
