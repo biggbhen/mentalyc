@@ -1,7 +1,7 @@
 {
 	"name": "mentalyc",
 	"version": "1.0.0",
-	"description": "mentalyc backend for storing audio files",
+	"description": "",
 	"main": "index.js",
 	"scripts": {
 		"start": "node index.js",
