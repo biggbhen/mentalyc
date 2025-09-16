@@ -12,7 +12,7 @@ connectDB();
 
 const corsOptions = {
 	origin: '*',
-	optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+	optionsSuccessStatus: 200,
 	methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 };
 
@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
 // Routes
 app.use('/api/recording', require('./routes/recording'));
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 server.listen(PORT, () => {
 	console.log(`Hurray! Our Server is running at port:${PORT}`);

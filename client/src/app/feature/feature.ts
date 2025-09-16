@@ -23,9 +23,9 @@ const initialState: RootState = {
 };
 const getBaseUrl = () => {
 	if (window.location.hostname !== 'localhost') {
-		return `https://mentalyc-server.cyclic.app`;
+		return `https://mentalyc-fbn7.onrender.com`;
 	} else {
-		return `http://localhost:5000`;
+		return `http://localhost:5001`;
 	}
 };
 
